@@ -3,5 +3,5 @@ package main
 import "fmt"
 
 func main() {
-    fmt.Println("wip")
+    fmt.Println("sled 15 minuti kachvam")
 }
