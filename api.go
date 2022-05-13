@@ -37,3 +37,18 @@ var offices = []Office{
 type officesResponse struct {
 	Offices []Office `json:"offices"`
 }
+
+type shippingRequest struct {
+	CityID   int    `json:"city_id" form:"city_id"`
+	OfficeID int    `json:"office_id" form:"office_id"`
+	Extra    string `json:"extra" form:"extra"`
+}
+
+type shippingResponse struct {
+	ID    string `json:"id"`
+	Extra string `json:"extra"`
+}
+
+type errorResponse struct {
+	Error error `json:"error"`
+}
