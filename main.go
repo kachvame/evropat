@@ -41,6 +41,11 @@ func run() error {
 				Cities: cities,
 			})
 		})
+		r.Get("/offices", func(w http.ResponseWriter, r *http.Request) {
+			render.JSON(w, r, officesResponse{
+				Offices: offices,
+			})
+		})
 	})
 
 	addr := ":3333"
