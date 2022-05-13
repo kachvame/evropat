@@ -54,8 +54,7 @@ func run() error {
 	})
 
 	r.Route("/v6", func(r chi.Router) {
-		r.Post("/orders/{id}/shipping", func(w http.ResponseWriter, r *http.Request) {
-			id := chi.URLParam(r, "orderID")
+		r.Post("/waybills", func(w http.ResponseWriter, r *http.Request) {
 			if rand.Float64() < 0.23 {
 				panic("opa") // todo error handling
 			}
@@ -68,7 +67,7 @@ func run() error {
 				return
 			}
 
-			shippingID := sha256.Sum256([]byte(fmt.Sprintf("%s-%d-%d", id, dto.CityID, dto.OfficeID)))
+			shippingID := sha256.Sum256([]byte(fmt.Sprintf("%d-%d", dto.CityID, dto.OfficeID)))
 			render.JSON(w, r, shippingResponse{
 				ID:    hex.EncodeToString(shippingID[:]),
 				Extra: regexp.MustCompile(`\w+`).ReplaceAllString(dto.Extra, "[censored]"),
