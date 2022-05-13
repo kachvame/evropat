@@ -16,5 +16,5 @@ var cities = []City{
 }
 
 type citiesResponse struct {
-	Cities []City
+	Cities []City `json:"cities"`
 }
