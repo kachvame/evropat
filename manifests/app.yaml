@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: evropat-deployment
+  namespace: evropat
+spec:
+  selector:
+    matchLabels:
+      app: evropat
+  template:
+    metadata:
+      labels:
+        app: evropat
+    spec:
+      containers:
+      - image: ghcr.io/kachvame/evropat
+        name: evropat
+        ports:
+        - containerPort: 3333
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: evropat-service
+  namespace: evropat
+spec:
+  selector:
+    app: evropat
+  ports:
+    - protocol: TCP
+      port: 3333
+      targetPort: 3333
