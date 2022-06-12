@@ -1,0 +1,37 @@
+name: Release
+
+on:
+  release:
+    types: [ published ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - name: evropat
+            path: .
+    steps:
+      - run: echo "IMAGE_TAG=${GITHUB_REF:10}" >> $GITHUB_ENV
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to GHCR
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.GHCR_USERNAME }}
+          password: ${{ secrets.GHCR_TOKEN }}
+      - name: Get repo owner in lowercase
+        id: owner_name
+        run: echo ::set-output name=owner::$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')
+      - name: Build
+        uses: docker/build-push-action@v2
+        with:
+          context: ${{ matrix.path }}
+          builder: ${{ steps.buildx.outputs.name }}
+          push: true
+          tags: ghcr.io/${{ steps.owner_name.outputs.owner }}/${{ matrix.name }}:${{ env.IMAGE_TAG }},ghcr.io/${{ steps.owner_name.outputs.owner }}/${{ matrix.name }}:latest
